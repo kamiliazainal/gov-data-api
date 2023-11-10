@@ -16,7 +16,7 @@ class FuelPriceController extends Controller
 
     public function __construct()
     {
-        $this->currentDate = Carbon::now()->subMonth()->format('Y-m-d');
+        $this->currentDate = Carbon::now()->subMonths(3)->format('Y-m-d');
         $this->url = 'https://api.data.gov.my/data-catalogue';
         $this->id = 'fuelprice';
     }
@@ -46,9 +46,16 @@ class FuelPriceController extends Controller
 
         $response = $request->collect();
 
-        $response = $response->filter(function($item) {
+        $filteredData = $response->filter(function($item) {
             return $item['series_type'] != 'change_weekly';
         });
+
+        $chartData = [
+            'labels' => $filteredData->pluck('date'),
+            'data' => $filteredData->pluck('ron95'),
+        ];
+
+        return response()->json($chartData);
     }
 
     public function ron97()
@@ -62,9 +69,16 @@ class FuelPriceController extends Controller
 
         $response = $request->collect();
 
-        $response = $response->filter(function($item) {
+        $filteredData = $response->filter(function($item) {
             return $item['series_type'] != 'change_weekly';
         });
+
+        $chartData = [
+            'labels' => $filteredData->pluck('date'),
+            'data' => $filteredData->pluck('ron97'),
+        ];
+
+        return response()->json($chartData);
     }
 
     public function diesel()
@@ -78,9 +92,16 @@ class FuelPriceController extends Controller
 
         $response = $request->collect();
 
-        $response = $response->filter(function($item) {
+        $filteredData = $response->filter(function($item) {
             return $item['series_type'] != 'change_weekly';
         });
+
+        $chartData = [
+            'labels' => $filteredData->pluck('date'),
+            'data' => $filteredData->pluck('diesel'),
+        ];
+
+        return response()->json($chartData);
     }
 
 }

@@ -16,3 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/chartjs', function () {
+    return view('chartjs');
+});
+
+Route::prefix('fuel-price')
+       ->name('fuel-price.')
+       ->group(function () {
+            Route::get('/', function () {
+                return view('fuel-price');
+            });
+       });
