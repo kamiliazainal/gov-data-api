@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\api\FuelPriceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\api\FuelPriceController;
+use App\Http\Controllers\api\PopulationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +29,11 @@ Route::prefix('fuel-price')
             Route::get('diesel', [FuelPriceController::class, 'diesel']);
        });
 
+Route::get('/population', [PopulationController::class, 'index'])->name('population');
 
+Route::prefix('population')
+       ->name('population.')
+       ->group(function () {
+            Route::get('/', [PopulationController::class, 'index']);
+            Route::get('gender', [PopulationController::class, 'gender']);
+       });

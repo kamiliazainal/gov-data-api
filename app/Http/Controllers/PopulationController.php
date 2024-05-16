@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,24 +24,13 @@ class PopulationController extends Controller
         //     return ($item['date'] >= $date);
         // }));
 
-        return $jsonData;
+        // $response = response()->json($filteredData);
+        // dd($response, $filteredData);
+
+        return view('population', compact('jsonData'));
+        // return $filteredData;
     }
 
-    public function gender()
-    {
-        $jsonData = Storage::json('population.json');
-        $date = Carbon::now()->subYears(10)->format('Y-m-d');
-
-        $collection = collect($jsonData);
-        $filteredData = $collection->filter(function($item) use($date) {
-            return ($item['date'] >= $date && $item['sex'] != 'both');
-        });
-
-        $chartData = [
-            'labels' => $filteredData->pluck('sex'),
-            'data' => $filteredData->pluck('population'),
-        ];
-
-        return response()->json($chartData);
-    }
+    public function filterData()
+    {}
 }

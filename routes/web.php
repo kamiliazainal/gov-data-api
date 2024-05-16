@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PopulationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,14 +18,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/chartjs', function () {
-    return view('chartjs');
+Route::prefix('fuel-price')
+    ->name('fuel-price.')
+    ->group(function () {
+        Route::get('/', function () {
+            return view('fuel-price');
+        });
+    });
+
+Route::get('/grid-layout', function () {
+    return view('grid');
 });
 
-Route::prefix('fuel-price')
-       ->name('fuel-price.')
-       ->group(function () {
-            Route::get('/', function () {
-                return view('fuel-price');
-            });
-       });
+Route::get('/population', [PopulationController::class, 'index'])->name('population');

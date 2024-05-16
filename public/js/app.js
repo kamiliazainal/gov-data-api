@@ -3020,16 +3020,22 @@ function withinMaxClamp(min, value, max) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-/* harmony import */ var _mychart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mychart.js */ "./resources/js/mychart.js");
-/* harmony import */ var _mychart_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_mychart_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _fuel_price_ron95_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fuel-price/ron95.js */ "./resources/js/fuel-price/ron95.js");
-/* harmony import */ var _fuel_price_ron97_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./fuel-price/ron97.js */ "./resources/js/fuel-price/ron97.js");
-/* harmony import */ var _fuel_price_diesel_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./fuel-price/diesel.js */ "./resources/js/fuel-price/diesel.js");
+/* harmony import */ var _fuel_price_ron95_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fuel-price/ron95.js */ "./resources/js/fuel-price/ron95.js");
+/* harmony import */ var _fuel_price_ron97_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fuel-price/ron97.js */ "./resources/js/fuel-price/ron97.js");
+/* harmony import */ var _fuel_price_diesel_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./fuel-price/diesel.js */ "./resources/js/fuel-price/diesel.js");
+/* harmony import */ var _population_bar_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./population/bar.js */ "./resources/js/population/bar.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var chart_js_auto__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! chart.js/auto */ "./node_modules/chart.js/auto/auto.js");
 
 
 
 
 
+
+window.axios = axios__WEBPACK_IMPORTED_MODULE_5__["default"];
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+window.Chart = chart_js_auto__WEBPACK_IMPORTED_MODULE_6__["default"];
 
 /***/ }),
 
@@ -3042,7 +3048,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 
 
 /**
@@ -3051,9 +3056,10 @@ __webpack_require__.r(__webpack_exports__);
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
+// import axios from 'axios';
+// window.axios = axios;
 
-window.axios = axios__WEBPACK_IMPORTED_MODULE_1__["default"];
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+// window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -3186,44 +3192,54 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/fuel-price/ron97').then(
 
 /***/ }),
 
-/***/ "./resources/js/mychart.js":
-/*!*********************************!*\
-  !*** ./resources/js/mychart.js ***!
-  \*********************************/
-/***/ (() => {
+/***/ "./resources/js/population/bar.js":
+/*!****************************************!*\
+  !*** ./resources/js/population/bar.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var chart_js_auto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! chart.js/auto */ "./node_modules/chart.js/auto/auto.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 
 
-// import Chart from 'chart.js/auto';
+axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/gender').then(function (response) {
+  var labels = ['Female', 'Male'];
+  // const labels = response.data.labels;
+  // const dataset = {
+  //     label: 'Gender Population',
+  //     backgroundColor: ['pink', 'blue'],
+  //     borderColor: ['pink', 'blue'],
+  //     data: data.data,
+  //     borderWidth: 1
+  // };
 
-// const labels = [
-//     'January',
-//     'February',
-//     'March',
-//     'April',
-//     'May',
-//     'June',
-// ];
-
-// const data = {
-//     labels: labels,
-//     datasets: [{
-//         label: 'My First dataset',
-//         backgroundColor: 'rgb(255, 99, 132)',
-//         borderColor: 'rgb(255, 99, 132)',
-//         data: [0, 10, 5, 2, 20, 30, 45],
-//     }]
-// };
-
-// const config = {
-//     type: 'line',
-//     data: data,
-//     options: {}
-// };
-
-// new Chart(
-//     document.getElementById('myChart'),
-//     config
-// );
+  var data = {
+    labels: labels,
+    datasets: [{
+      label: 'Gender Population',
+      data: response.data.data,
+      backgroundColor: ['pink', 'blue'],
+      borderColor: ['pink', 'blue'],
+      borderWidth: 1
+    }]
+  };
+  var config = {
+    type: 'bar',
+    data: data,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+  new chart_js_auto__WEBPACK_IMPORTED_MODULE_0__["default"](document.getElementById('genderPopulation'), config);
+})["catch"](function (error) {
+  console.log(error);
+});
 
 /***/ }),
 
@@ -9773,10 +9789,10 @@ module.exports = Array.isArray || function (arr) {
 
 /***/ }),
 
-/***/ "./resources/sass/app.scss":
-/*!*********************************!*\
-  !*** ./resources/sass/app.scss ***!
-  \*********************************/
+/***/ "./resources/css/app.css":
+/*!*******************************!*\
+  !*** ./resources/css/app.css ***!
+  \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -29074,18 +29090,6 @@ function styleChanged(style, prevStyle) {
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -29186,7 +29190,7 @@ function styleChanged(style, prevStyle) {
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
 /******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/sass/app.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/css/app.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
