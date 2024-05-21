@@ -3024,18 +3024,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fuel_price_ron97_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fuel-price/ron97.js */ "./resources/js/fuel-price/ron97.js");
 /* harmony import */ var _fuel_price_diesel_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./fuel-price/diesel.js */ "./resources/js/fuel-price/diesel.js");
 /* harmony import */ var _population_bar_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./population/bar.js */ "./resources/js/population/bar.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
-/* harmony import */ var chart_js_auto__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! chart.js/auto */ "./node_modules/chart.js/auto/auto.js");
+/* harmony import */ var _population_stacked_bar_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./population/stacked-bar.js */ "./resources/js/population/stacked-bar.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var chart_js_auto__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! chart.js/auto */ "./node_modules/chart.js/auto/auto.js");
 
 
 
 
 
 
-window.axios = axios__WEBPACK_IMPORTED_MODULE_5__["default"];
+
+window.axios = axios__WEBPACK_IMPORTED_MODULE_6__["default"];
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.Chart = chart_js_auto__WEBPACK_IMPORTED_MODULE_6__["default"];
+window.Chart = chart_js_auto__WEBPACK_IMPORTED_MODULE_7__["default"];
 
 /***/ }),
 
@@ -3237,6 +3239,86 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/gender').then
     }
   };
   new chart_js_auto__WEBPACK_IMPORTED_MODULE_0__["default"](document.getElementById('genderPopulation'), config);
+})["catch"](function (error) {
+  console.log(error);
+});
+
+/***/ }),
+
+/***/ "./resources/js/population/stacked-bar.js":
+/*!************************************************!*\
+  !*** ./resources/js/population/stacked-bar.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var chart_js_auto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! chart.js/auto */ "./node_modules/chart.js/auto/auto.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+
+
+axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/date-gender').then(function (response) {
+  console.log(response.data.labels);
+  var labels = response.data.labels;
+  var female = labels.filter(function (label) {
+    return label == 'female';
+  });
+  var male = labels.filter(function (label) {
+    return label == 'male';
+  });
+  var dataResponse = response.data.data;
+  var years = [];
+  for (var i = 0; i < dataResponse.length; i++) {
+    var element = dataResponse[i];
+    var date = new Date(element);
+    years.push(date.getFullYear());
+    var test = labels.filter(function (label) {
+      return label == 'female';
+    });
+    console.log(test);
+  }
+  var distinctYears = _toConsumableArray(new Set(years));
+  console.log(distinctYears, female.length);
+  var data = {
+    labels: distinctYears,
+    datasets: [{
+      label: 'Female',
+      data: female.length,
+      backgroundColor: 'pink'
+    }, {
+      label: 'Male',
+      data: male.length,
+      backgroundColor: 'blue'
+    }]
+  };
+  var config = {
+    type: 'bar',
+    data: data,
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Year x Gender'
+        }
+      },
+      responsive: true,
+      scales: {
+        x: {
+          stacked: true
+        },
+        y: {
+          stacked: true
+        }
+      }
+    }
+  };
+  new chart_js_auto__WEBPACK_IMPORTED_MODULE_0__["default"](document.getElementById('dateGender'), config);
 })["catch"](function (error) {
   console.log(error);
 });

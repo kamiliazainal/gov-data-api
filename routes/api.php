@@ -36,4 +36,5 @@ Route::prefix('population')
        ->group(function () {
             Route::get('/', [PopulationController::class, 'index']);
             Route::get('gender', [PopulationController::class, 'gender']);
+            Route::get('date-gender', [PopulationController::class, 'dateGender']);
        });

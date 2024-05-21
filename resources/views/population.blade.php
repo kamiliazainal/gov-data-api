@@ -11,28 +11,34 @@
                 <th class="px-4 py-2">Population</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach ($jsonData as $data)
-                <tr>
-                    <td class="border px-4 py-2">{{ $data['date'] }}</td>
-                    <td class="border px-4 py-2">{{ $data['sex'] }}</td>
-                    <td class="border px-4 py-2">{{ $data['age'] }}</td>
-                    <td class="border px-4 py-2">{{ $data['ethnicity'] }}</td>
-                    <td class="border px-4 py-2">{{ $data['population'] }}</td>
-                </tr>
-            @endforeach
-        </tbody>
     </table>
 
     <div class="col-4">
         <canvas id="genderPopulation"></canvas>
+    </div>
+
+    <div class="col-4">
+        <canvas id="dateGender"></canvas>
     </div>
 @endsection
 
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#myTable').DataTable();
+            $('#myTable').DataTable({
+                ajax: {
+                    url: '/api/population',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'date' },
+                    { data: 'sex' },
+                    { data: 'age' },
+                    { data: 'ethnicity' },
+                    { data: 'population' }
+                ],
+                deferRender: true
+            });
         });
     </script>
 @endpush

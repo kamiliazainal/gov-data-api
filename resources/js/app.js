@@ -3,6 +3,7 @@ import './fuel-price/ron95.js';
 import './fuel-price/ron97.js';
 import './fuel-price/diesel.js';
 import './population/bar.js';
+import './population/stacked-bar.js';
 
 import axios from 'axios';
 window.axios = axios;
