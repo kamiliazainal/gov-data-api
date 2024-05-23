@@ -42,13 +42,13 @@ axios.get('/api/population/date-gender')
                                 let dataIndex = tooltipItems[0].dataIndex;
 
                                 // Find the counts for male and female for the specific year
-                                let maleCount = data.datasets[1].data[dataIndex];
-                                let femaleCount = data.datasets[0].data[dataIndex];
+                                let maleCount = data.datasets[1].data[dataIndex].toFixed(2);
+                                let femaleCount = data.datasets[0].data[dataIndex].toFixed(2);
 
                                 return [
-                                    'Male: ' + maleCount,
-                                    'Female: ' + femaleCount,
-                                    'Total: ' + (maleCount + femaleCount)
+                                    'Male: ' + parseInt(maleCount).toLocaleString(),
+                                    'Female: ' + parseInt(femaleCount).toLocaleString(),
+                                    'Total: ' + (parseInt(maleCount) + parseInt(femaleCount)).toLocaleString()
                                 ];
                             },
                         }
@@ -60,7 +60,11 @@ axios.get('/api/population/date-gender')
                         stacked: true,
                     },
                     y: {
-                        stacked: true
+                        stacked: true,
+                        ticks: {
+                            // forces step size to be 50 units
+                            stepSize: 10000
+                          }
                     }
                 }
             }

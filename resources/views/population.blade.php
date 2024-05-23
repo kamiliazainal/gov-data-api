@@ -20,6 +20,10 @@
     <div class="col-4">
         <canvas id="dateGender"></canvas>
     </div>
+
+    <div class="col-4">
+        <canvas id="dateGenderRace"></canvas>
+    </div>
 @endsection
 
 @push('scripts')

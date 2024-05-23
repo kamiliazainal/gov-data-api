@@ -3025,8 +3025,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fuel_price_diesel_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./fuel-price/diesel.js */ "./resources/js/fuel-price/diesel.js");
 /* harmony import */ var _population_bar_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./population/bar.js */ "./resources/js/population/bar.js");
 /* harmony import */ var _population_stacked_bar_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./population/stacked-bar.js */ "./resources/js/population/stacked-bar.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
-/* harmony import */ var chart_js_auto__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! chart.js/auto */ "./node_modules/chart.js/auto/auto.js");
+/* harmony import */ var _population_group_bar_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./population/group-bar.js */ "./resources/js/population/group-bar.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var chart_js_auto__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! chart.js/auto */ "./node_modules/chart.js/auto/auto.js");
 
 
 
@@ -3034,10 +3035,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-window.axios = axios__WEBPACK_IMPORTED_MODULE_6__["default"];
+
+window.axios = axios__WEBPACK_IMPORTED_MODULE_7__["default"];
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.Chart = chart_js_auto__WEBPACK_IMPORTED_MODULE_7__["default"];
+window.Chart = chart_js_auto__WEBPACK_IMPORTED_MODULE_8__["default"];
 
 /***/ }),
 
@@ -3245,6 +3247,105 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/gender').then
 
 /***/ }),
 
+/***/ "./resources/js/population/group-bar.js":
+/*!**********************************************!*\
+  !*** ./resources/js/population/group-bar.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var chart_js_auto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! chart.js/auto */ "./node_modules/chart.js/auto/auto.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+
+
+axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/date-gender-race').then(function (response) {
+  var labels = response.data.labels;
+  var malesMalay = response.data.malesMalay;
+  var femalesMalay = response.data.femalesMalay;
+  var malesBumi = response.data.malesBumi;
+  var femalesBumi = response.data.femalesBumi;
+  var malesIndian = response.data.malesIndian;
+  var femalesIndian = response.data.femalesIndian;
+  var malesChinese = response.data.malesChinese;
+  var femalesChinese = response.data.femalesChinese;
+  var malesOthers = response.data.malesOthers;
+  var femalesOthers = response.data.femalesOthers;
+  var data = {
+    labels: labels,
+    datasets: [{
+      label: 'Female Malay',
+      data: femalesMalay,
+      backgroundColor: 'pink'
+    }, {
+      label: 'Male Malay',
+      data: malesMalay,
+      backgroundColor: 'blue'
+    }, {
+      label: 'Female Bumi',
+      data: femalesBumi,
+      backgroundColor: 'pink'
+    }, {
+      label: 'Male Bumi',
+      data: malesBumi,
+      backgroundColor: 'blue'
+    }, {
+      label: 'Female Indian',
+      data: femalesIndian,
+      backgroundColor: 'pink'
+    }, {
+      label: 'Male Indian',
+      data: malesIndian,
+      backgroundColor: 'blue'
+    }, {
+      label: 'Female Chinese',
+      data: femalesChinese,
+      backgroundColor: 'pink'
+    }, {
+      label: 'Male Chinese',
+      data: malesChinese,
+      backgroundColor: 'blue'
+    }, {
+      label: 'Female Others',
+      data: femalesOthers,
+      backgroundColor: 'pink'
+    }, {
+      label: 'Male Others',
+      data: malesOthers,
+      backgroundColor: 'blue'
+    }]
+  };
+  var config = {
+    type: 'bar',
+    data: data,
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Year x Gender x Race'
+        }
+      },
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            format: {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2
+            }
+          }
+        }
+      }
+    }
+  };
+  new chart_js_auto__WEBPACK_IMPORTED_MODULE_0__["default"](document.getElementById('dateGenderRace').getContext('2d'), config);
+})["catch"](function (error) {
+  console.log(error);
+});
+
+/***/ }),
+
 /***/ "./resources/js/population/stacked-bar.js":
 /*!************************************************!*\
   !*** ./resources/js/population/stacked-bar.js ***!
@@ -3292,9 +3393,9 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/date-gender')
               var dataIndex = tooltipItems[0].dataIndex;
 
               // Find the counts for male and female for the specific year
-              var maleCount = data.datasets[1].data[dataIndex];
-              var femaleCount = data.datasets[0].data[dataIndex];
-              return ['Male: ' + maleCount, 'Female: ' + femaleCount, 'Total: ' + (maleCount + femaleCount)];
+              var maleCount = data.datasets[1].data[dataIndex].toFixed(2);
+              var femaleCount = data.datasets[0].data[dataIndex].toFixed(2);
+              return ['Male: ' + parseInt(maleCount).toLocaleString(), 'Female: ' + parseInt(femaleCount).toLocaleString(), 'Total: ' + (parseInt(maleCount) + parseInt(femaleCount)).toLocaleString()];
             }
           }
         }
@@ -3305,7 +3406,11 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/date-gender')
           stacked: true
         },
         y: {
-          stacked: true
+          stacked: true,
+          ticks: {
+            // forces step size to be 50 units
+            stepSize: 10000
+          }
         }
       }
     }
