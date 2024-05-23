@@ -3276,43 +3276,43 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/date-gender-r
     datasets: [{
       label: 'Female Malay',
       data: femalesMalay,
-      backgroundColor: 'pink'
+      backgroundColor: '#D5D8DC'
     }, {
       label: 'Male Malay',
       data: malesMalay,
-      backgroundColor: 'blue'
+      backgroundColor: '#566573'
     }, {
       label: 'Female Bumi',
       data: femalesBumi,
-      backgroundColor: 'pink'
+      backgroundColor: '#F6DDCC'
     }, {
       label: 'Male Bumi',
       data: malesBumi,
-      backgroundColor: 'blue'
+      backgroundColor: '#DC7633'
     }, {
       label: 'Female Indian',
       data: femalesIndian,
-      backgroundColor: 'pink'
+      backgroundColor: '#FCF3CF'
     }, {
       label: 'Male Indian',
       data: malesIndian,
-      backgroundColor: 'blue'
+      backgroundColor: '#F5B041'
     }, {
       label: 'Female Chinese',
       data: femalesChinese,
-      backgroundColor: 'pink'
+      backgroundColor: '#D5F5E3'
     }, {
       label: 'Male Chinese',
       data: malesChinese,
-      backgroundColor: 'blue'
+      backgroundColor: '#58D68D'
     }, {
       label: 'Female Others',
       data: femalesOthers,
-      backgroundColor: 'pink'
+      backgroundColor: '#D6EAF8'
     }, {
       label: 'Male Others',
       data: malesOthers,
-      backgroundColor: 'blue'
+      backgroundColor: '#5DADE2'
     }]
   };
   var config = {
