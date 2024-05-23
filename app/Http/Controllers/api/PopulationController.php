@@ -41,7 +41,7 @@ class PopulationController extends Controller
         $date = Carbon::now()->subYears(10)->format('Y-m-d');
 
         $collection = collect($jsonData);
-        $filteredData = $collection->filter(function($item) use($date) {
+        $filteredData = $collection->filter(function ($item) use ($date) {
             return ($item['date'] >= $date && $item['sex'] != 'both');
         });
 
@@ -59,29 +59,30 @@ class PopulationController extends Controller
 
         $date = Carbon::now()->subYears(10)->format('Y-m-d');
         $collection = collect($jsonData);
-        $filteredData = $collection->filter(function($item) use($date) {
+        $filteredData = $collection->filter(function ($item) use ($date) {
             return ($item['date'] >= $date && $item['sex'] != 'both');
         });
 
-        $female = $filteredData->pluck('sex')->filter(function($item){
-            return ($item == 'female');
+        $groupedData = $filteredData->groupBy(function ($item) {
+            return Carbon::parse($item['date'])->format('Y');
         });
 
-        $male = $filteredData->pluck('sex')->filter(function($item){
-            return ($item == 'male');
-        });
+        $years = [];
+        $maleCounts = [];
+        $femaleCounts = [];
 
-        $keys = $filteredData->pluck('date')->toArray();
-        // $values = $filteredData->pluck('sex')->toArray();
-        $mergedFemale = array_combine($keys, $female->toArray());
-        $mergedMale = array_combine($keys, $male->toArray());
-
-        dd($mergedFemale, $mergedMale);
+        foreach ($groupedData as $year => $data) {
+            $years[] = $year;
+            $maleCounts[] = $data->where('sex', 'male')->count();
+            $femaleCounts[] = $data->where('sex', 'female')->count();
+        }
 
         $chartData = [
-            'labels' => $mergedArrays,
-            'data' => $filteredData->pluck('date'),
+            'labels' => $years,
+            'males' => $maleCounts,
+            'females' => $femaleCounts
         ];
+
         return response()->json($chartData);
     }
 }

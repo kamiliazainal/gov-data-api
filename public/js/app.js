@@ -3255,45 +3255,21 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/gender').then
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var chart_js_auto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! chart.js/auto */ "./node_modules/chart.js/auto/auto.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 
 
 axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/date-gender').then(function (response) {
-  console.log(response.data.labels);
   var labels = response.data.labels;
-  var female = labels.filter(function (label) {
-    return label == 'female';
-  });
-  var male = labels.filter(function (label) {
-    return label == 'male';
-  });
-  var dataResponse = response.data.data;
-  var years = [];
-  for (var i = 0; i < dataResponse.length; i++) {
-    var element = dataResponse[i];
-    var date = new Date(element);
-    years.push(date.getFullYear());
-    var test = labels.filter(function (label) {
-      return label == 'female';
-    });
-    console.log(test);
-  }
-  var distinctYears = _toConsumableArray(new Set(years));
-  console.log(distinctYears, female.length);
+  var males = response.data.males;
+  var females = response.data.females;
   var data = {
-    labels: distinctYears,
+    labels: labels,
     datasets: [{
       label: 'Female',
-      data: female.length,
+      data: females,
       backgroundColor: 'pink'
     }, {
       label: 'Male',
-      data: male.length,
+      data: males,
       backgroundColor: 'blue'
     }]
   };
@@ -3305,6 +3281,22 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/date-gender')
         title: {
           display: true,
           text: 'Year x Gender'
+        },
+        tooltip: {
+          callbacks: {
+            label: function label(context) {
+              // Do not return a label here to avoid redundancy
+              return '';
+            },
+            afterBody: function afterBody(tooltipItems) {
+              var dataIndex = tooltipItems[0].dataIndex;
+
+              // Find the counts for male and female for the specific year
+              var maleCount = data.datasets[1].data[dataIndex];
+              var femaleCount = data.datasets[0].data[dataIndex];
+              return ['Male: ' + maleCount, 'Female: ' + femaleCount, 'Total: ' + (maleCount + femaleCount)];
+            }
+          }
         }
       },
       responsive: true,
@@ -3318,7 +3310,7 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/date-gender')
       }
     }
   };
-  new chart_js_auto__WEBPACK_IMPORTED_MODULE_0__["default"](document.getElementById('dateGender'), config);
+  new chart_js_auto__WEBPACK_IMPORTED_MODULE_0__["default"](document.getElementById('dateGender').getContext('2d'), config);
 })["catch"](function (error) {
   console.log(error);
 });
