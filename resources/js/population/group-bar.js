@@ -86,7 +86,7 @@ axios.get('/api/population/date-gender-race')
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            format: { maximumFractionDigits: 2, minimumFractionDigits: 2 }
+                            format: { maximumFractionDigits: 0, minimumFractionDigits: 0 }
                           }
                     }
                 }

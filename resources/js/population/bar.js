@@ -4,20 +4,17 @@ import axios from "axios";
 axios.get('/api/population/gender')
     .then(response => {
         const labels = ['Female', 'Male'];
-        // const labels = response.data.labels;
-        // const dataset = {
-        //     label: 'Gender Population',
-        //     backgroundColor: ['pink', 'blue'],
-        //     borderColor: ['pink', 'blue'],
-        //     data: data.data,
-        //     borderWidth: 1
-        // };
+
+        const female = response.data.data[0].toFixed(0);
+        const male = response.data.data[1].toFixed(0);
+
+        const totalPopulation = [female,male];
 
         const data = {
             labels: labels,
             datasets: [{
                 label: 'Gender Population',
-                data: response.data.data,
+                data: totalPopulation,
                 backgroundColor: ['pink', 'blue'],
                 borderColor: ['pink', 'blue'],
                 borderWidth: 1

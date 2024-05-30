@@ -3210,20 +3210,14 @@ __webpack_require__.r(__webpack_exports__);
 
 axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/gender').then(function (response) {
   var labels = ['Female', 'Male'];
-  // const labels = response.data.labels;
-  // const dataset = {
-  //     label: 'Gender Population',
-  //     backgroundColor: ['pink', 'blue'],
-  //     borderColor: ['pink', 'blue'],
-  //     data: data.data,
-  //     borderWidth: 1
-  // };
-
+  var female = response.data.data[0].toFixed(0);
+  var male = response.data.data[1].toFixed(0);
+  var totalPopulation = [female, male];
   var data = {
     labels: labels,
     datasets: [{
       label: 'Gender Population',
-      data: response.data.data,
+      data: totalPopulation,
       backgroundColor: ['pink', 'blue'],
       borderColor: ['pink', 'blue'],
       borderWidth: 1
@@ -3331,8 +3325,8 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/date-gender-r
           beginAtZero: true,
           ticks: {
             format: {
-              maximumFractionDigits: 2,
-              minimumFractionDigits: 2
+              maximumFractionDigits: 0,
+              minimumFractionDigits: 0
             }
           }
         }
@@ -3393,8 +3387,8 @@ axios__WEBPACK_IMPORTED_MODULE_1__["default"].get('/api/population/date-gender')
               var dataIndex = tooltipItems[0].dataIndex;
 
               // Find the counts for male and female for the specific year
-              var maleCount = data.datasets[1].data[dataIndex].toFixed(2);
-              var femaleCount = data.datasets[0].data[dataIndex].toFixed(2);
+              var maleCount = data.datasets[1].data[dataIndex].toFixed(0);
+              var femaleCount = data.datasets[0].data[dataIndex].toFixed(0);
               return ['Male: ' + parseInt(maleCount).toLocaleString(), 'Female: ' + parseInt(femaleCount).toLocaleString(), 'Total: ' + (parseInt(maleCount) + parseInt(femaleCount)).toLocaleString()];
             }
           }

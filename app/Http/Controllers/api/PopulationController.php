@@ -41,13 +41,17 @@ class PopulationController extends Controller
         $date = Carbon::now()->subYears(10)->format('Y-m-d');
 
         $collection = collect($jsonData);
-        $filteredData = $collection->filter(function ($item) use ($date) {
-            return ($item['date'] >= $date && $item['age'] != 'overall' && $item['sex'] != 'both');
-        });
+
+        $maleCounts = $collection->filter(function ($item)  use ($date) {
+            return ($item['date'] >= $date && $item['age'] != 'overall' && $item['ethnicity'] != 'overall' && $item['sex'] == 'male');
+        })->sum('population');
+
+        $femaleCounts = $collection->filter(function ($item)  use ($date) {
+            return ($item['date'] >= $date && $item['age'] != 'overall' && $item['ethnicity'] != 'overall' && $item['sex'] == 'female');
+        })->sum('population');
 
         $chartData = [
-            'labels' => $filteredData->pluck('sex'),
-            'data' => $filteredData->pluck('population'),
+            'data' => [$femaleCounts, $maleCounts],
         ];
 
         return response()->json($chartData);
@@ -60,7 +64,7 @@ class PopulationController extends Controller
         $date = Carbon::now()->subYears(10)->format('Y-m-d');
         $collection = collect($jsonData);
         $filteredData = $collection->filter(function ($item) use ($date) {
-            return ($item['date'] >= $date && $item['age'] != 'overall' && $item['sex'] != 'both');
+            return ($item['date'] >= $date && $item['age'] != 'overall' && $item['ethnicity'] != 'overall' && $item['sex'] != 'both');
         });
 
         $groupedData = $filteredData->groupBy(function ($item) {
@@ -122,8 +126,8 @@ class PopulationController extends Controller
             $femaleIndianCounts[] = $data->where('sex', 'female')->where('ethnicity', 'indian')->sum('population');
             $maleChineseCounts[] = $data->where('sex', 'male')->where('ethnicity', 'chinese')->sum('population');
             $femaleChineseCounts[] = $data->where('sex', 'female')->where('ethnicity', 'chinese')->sum('population');
-            $maleOthersCounts[] = $data->where('sex', 'male')->whereIn('ethnicity', ['other_citizen','other_noncitizen','other'])->sum('population');
-            $femaleOthersCounts[] = $data->where('sex', 'female')->whereIn('ethnicity', ['other_citizen','other_noncitizen','other'])->sum('population');
+            $maleOthersCounts[] = $data->where('sex', 'male')->whereIn('ethnicity', ['other_citizen', 'other_noncitizen', 'other'])->sum('population');
+            $femaleOthersCounts[] = $data->where('sex', 'female')->whereIn('ethnicity', ['other_citizen', 'other_noncitizen', 'other'])->sum('population');
         }
 
         $chartData = [

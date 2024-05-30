@@ -42,8 +42,8 @@ axios.get('/api/population/date-gender')
                                 let dataIndex = tooltipItems[0].dataIndex;
 
                                 // Find the counts for male and female for the specific year
-                                let maleCount = data.datasets[1].data[dataIndex].toFixed(2);
-                                let femaleCount = data.datasets[0].data[dataIndex].toFixed(2);
+                                let maleCount = data.datasets[1].data[dataIndex].toFixed(0);
+                                let femaleCount = data.datasets[0].data[dataIndex].toFixed(0);
 
                                 return [
                                     'Male: ' + parseInt(maleCount).toLocaleString(),
